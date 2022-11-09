@@ -26,20 +26,21 @@ function getChartableIndex(char) {
 
 
 function cezarCode(char, offset = 3, decrypt = false ) {
-
     idx = getChartableIndex(char) + (decrypt ? -offset : offset);
-    if(idx < 0){
+    while(idx < 0){
         idx = idx + chartableLen;
-    } else if(idx >= chartableLen){
+    }
+
+    while(idx >= chartableLen){
         idx = idx - chartableLen;
     }
     return CHARTABLE[idx];
 }
 
 
-console.log("a => " + cezarCode("a",3));
-console.log("c => " + cezarCode("c",3));
-console.log("_ <= " + cezarCode("_",3,true));
+// console.log("a => " + cezarCode("a",3));
+// console.log("c => " + cezarCode("c",3));
+// console.log("_ <= " + cezarCode("_",3,true));
 
 
 IMPORTANT_MESSAGE = [
@@ -53,7 +54,7 @@ IMPORTANT_MESSAGE = [
 
 str ="\n";
 for (let i = 0; IMPORTANT_MESSAGE[i] !== 0; i++) {
-    str += cezarCode(IMPORTANT_MESSAGE[i],22,true);
+    str += cezarCode(IMPORTANT_MESSAGE[i],110,true); //22, 48
 }
 
 console.log(str)

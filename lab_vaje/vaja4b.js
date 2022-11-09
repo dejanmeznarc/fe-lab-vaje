@@ -4,7 +4,8 @@ CHARTABLE = ['a', 'b', 'c', 'č', 'd',
     'o', 'p', 'r', 's', 'š',
     't', 'u', 'v', 'z', 'ž', '_', 0];
 let chartableLen = 1
-for (; CHARTABLE[chartableLen] !== 0; chartableLen++) {}
+for (; CHARTABLE[chartableLen] !== 0; chartableLen++) {
+}
 
 function getChartableIndex(char) {
     for (let i = 0; CHARTABLE[i] !== 0; i++) {
@@ -12,10 +13,8 @@ function getChartableIndex(char) {
     }
 }
 
-
-function encryptCezar(char, offset = 3, encrypt = true) {
-
-    idx = getChartableIndex(char) + (encrypt ? -offset : offset);
+function cezarCode(char, offset = 3, decrypt = false) {
+    idx = getChartableIndex(char) + (decrypt ? -offset : offset);
     if (idx < 0) {
         idx = idx + chartableLen;
     } else if (idx >= chartableLen) {
@@ -24,16 +23,21 @@ function encryptCezar(char, offset = 3, encrypt = true) {
     return CHARTABLE[idx];
 }
 
+
 ////////////////////////////////
 
 
 // secrets
-passwd = ['a', 'm', 'f', 'o', 'r','a']
+passwd = ['a', 'm', 'f', 'o', 'r', 'a'];
 
-msg = ['p', 'r', 'i', 'm', 'i','t','e'];
+msg = ['p', 'r', 'i', 'm', 'i', 't', 'e', 'o', 'b', 'e', 'l', 'i', 'k', 's', 'a', '\0'];
 encMsg = [];
 
-for (let i = 0; i < msg.length; i++) {
-    encMsg[i] = pa
+for (let i = 0; msg[i] !== '\0'; i++) {
+    offset = getChartableIndex(passwd[i % passwd.length]);
+    encMsg[i] = cezarCode(msg[i], offset, false);
 }
 
+console.log(encMsg);
+
+console.log("pdocatecgtčikef");

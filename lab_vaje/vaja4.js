@@ -25,9 +25,9 @@ function getChartableIndex(char) {
 }
 
 
-function encryptCezar(char,  offset = 3, decrypt = false ) {
+function cezarCode(char, offset = 3, decrypt = false ) {
 
-    idx = getChartableIndex(char) + (decrypt ? offset : -offset);
+    idx = getChartableIndex(char) + (decrypt ? -offset : offset);
     if(idx < 0){
         idx = idx + chartableLen;
     } else if(idx >= chartableLen){
@@ -37,8 +37,9 @@ function encryptCezar(char,  offset = 3, decrypt = false ) {
 }
 
 
-console.log(encryptCezar("c",3));
-console.log(encryptCezar("_",3,true));
+console.log("a => " + cezarCode("a",3));
+console.log("c => " + cezarCode("c",3));
+console.log("_ <= " + cezarCode("_",3,true));
 
 
 IMPORTANT_MESSAGE = [
@@ -52,7 +53,7 @@ IMPORTANT_MESSAGE = [
 
 str ="\n";
 for (let i = 0; IMPORTANT_MESSAGE[i] !== 0; i++) {
-    str += encryptCezar(IMPORTANT_MESSAGE[i],-22,true);
+    str += cezarCode(IMPORTANT_MESSAGE[i],22,true);
 }
 
 console.log(str)

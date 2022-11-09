@@ -49,23 +49,25 @@ function gameSlotDoesExists(row, col) {
 }
 
 
-function getNeighboursDirections(row, col,rowDir = null, colDir=null , rec_cnt = 0) {
+function checkCellForWinner(row, col) {
     const cellValue = gameState[row][col];
-    if (cellValue === 0) return rec_cnt;
-    var neighboursDir = [];
+
+    if (cellValue === 0) return 0;
 
     for (let rowOfst = -1; rowOfst <= 1; rowOfst++) {
         for (let colOfst = -1; colOfst <= 1; colOfst++) {
 
-            const newRow = row+rowOfst;
-            const newCol = col+colOfst;
+            const newRow = row + rowOfst;
+            const newCol = col + colOfst;
 
             if (!(rowOfst === 0 && colOfst === 0)) { // dont return same point
                 if (gameSlotDoesExists(newRow, newCol)) {
                     if (cellValue === gameState[newRow][newCol]) {
                         // neighbour found
-                        if((rowOfst === rowDir && colOfst === colDir) || rowDir == null){
-                            return (getNeighboursDirections(newRow, newCol, rowOfst, colOfst, rec_cnt+1));
+                        const lenght = followPath(newRow, newCol, [rowOfst, colOfst]);
+
+                        if (lenght >= GAME_WIN_THRESHOLD) {
+                            return cellValue;
                         }
 
                     }
@@ -74,42 +76,57 @@ function getNeighboursDirections(row, col,rowDir = null, colDir=null , rec_cnt =
 
         }
     }
-    return rec_cnt;
+
+    return 0;
+
+
+}
+
+function followPath(rowStart, colStart, direction) {
+    const originalValue = gameState[rowStart][colStart];
+    let curRow = rowStart;
+    let curCol = colStart;
+
+    let cnt = 2;
+
+    while (cnt <= GAME_WIN_THRESHOLD) {
+        curRow += direction[0];
+        curCol += direction[1];
+
+        if (gameSlotDoesExists(curRow, curCol) && originalValue === gameState[curRow][curCol]) {
+            cnt++;
+        } else {
+            break;
+        }
+    }
+
+    return cnt;
 }
 
 
 function getGameWinner() {
     for (let row = 0; row < GAME_ROWS; row++) {
         for (let col = 0; col < GAME_COLS; col++) {
-
+            let winner = checkCellForWinner(row, col);
+            if (winner > 0) return winner;
         }
     }
-
+    return 0;
 }
 
 
-gamePutIn(1, 1);
-gamePutIn(2, 3);
-gamePutIn(2, 3);
-gamePutIn(2, 3);
-gamePutIn(1, 3);
-gamePutIn(2, 3);
-gamePutIn(2, 3);
-
-gamePutIn(1, 2);
-gamePutIn(2, 2);
-
-gamePutIn(2, 4);
-gamePutIn(2, 4);
-gamePutIn(2, 5);
-gamePutIn(2, 5);
-
+gameState = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 1, 1, 2],
+];
 gameStateRender();
-console.log("0,0 => ", getNeighboursDirections(0, 0));
-console.log("1,1 => ", getNeighboursDirections(1, 1));
-console.log("4,3 => ", getNeighboursDirections(4, 3));
+getGameWinner();
 
-
+console.log("winner", getGameWinner())
 
 
 
